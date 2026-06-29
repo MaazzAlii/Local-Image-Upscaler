@@ -1,4 +1,3 @@
-# 🔍 Local Image Upscaler & Resizer
 ---
 title: Local Image Upscaler
 emoji: 🔍
@@ -9,33 +8,97 @@ sdk_version: "1.32.0"
 app_file: app.py
 pinned: false
 ---
-A fully local image upscaling and resizing tool — no API, no internet required.
 
-## Features
-- **Upscale** blurry/small images (1.5×, 2×, 3×, 4×, up to 8×) using Lanczos/Bicubic
-- **Preset resize** for Instagram, Twitter, YouTube, WhatsApp, Wallpaper 4K, Print A4, and more
-- **Custom size** with optional aspect ratio lock
-- Fit modes: Letterbox (no crop), Fill (crop to cover), Stretch
-- Export as JPEG, PNG, or WebP with quality control
+# 🔍 Local Image Upscaler & Resizer
 
-## Run locally
+Upscale blurry images · Fix aspect ratios · Export any size — **all local, no API, no internet needed.**
 
+---
+
+## ▶️ Run Locally
+
+**Step 1 — Install dependencies (only do this once)**
 ```bash
-# 1. Install dependencies (only needs to be done once)
 pip install -r requirements.txt
+```
 
-# 2. Run the app
+**Step 2 — Run the app**
+```bash
 streamlit run app.py
 ```
 
-Then open http://localhost:8501 in your browser.
+**Step 3 — Open in browser**
+```
+http://localhost:8501
+```
 
-## Deploy to Hugging Face Spaces
+To stop the app, press `Ctrl + C` in the terminal.
 
-1. Create a new Space (SDK: Streamlit)
-2. Upload `app.py` and `requirements.txt`
-3. That's it — no `packages.txt` needed (pure Python, no system packages)
+---
 
-## No API key needed
-Everything runs locally using Pillow's built-in resampling algorithms.
-For even sharper upscaling, you can later integrate Real-ESRGAN (requires PyTorch).
+## 📦 What's Inside
+
+| File | Purpose |
+|------|---------|
+| `app.py` | Main Streamlit app |
+| `requirements.txt` | Python dependencies |
+| `README.md` | This file |
+
+---
+
+## 🛠️ Features
+
+- **Upscale** — Scale images 1.5×, 2×, 3×, 4×, 6×, 8× using Lanczos / Bicubic / Bilinear
+- **Preset Resize** — Instagram, Twitter, YouTube, WhatsApp, 4K Wallpaper, A4 Print, and more
+- **Custom Size** — Enter any width × height with optional aspect ratio lock
+- **Fit Modes** — Letterbox (no crop) · Fill (crop to cover) · Stretch
+- **Export** — JPEG, PNG, or WebP with quality control
+
+---
+
+## 💾 Push to GitHub (Backup)
+
+```bash
+git init
+git add .
+git commit -m "Initial commit: local image upscaler"
+git remote add origin https://github.com/MaazzAlii/local-image-upscaler.git
+git branch -M main
+git push -u origin main
+```
+
+For future updates:
+```bash
+git add .
+git commit -m "your update message"
+git push origin main
+```
+
+---
+
+## 🚀 Deploy to Hugging Face Spaces (do this later after watching a tutorial)
+
+```bash
+# Add Hugging Face as a remote
+git remote add huggingface https://huggingface.co/spaces/MaazzAlii/local-image-upscaler
+
+# Push to Hugging Face
+git push huggingface main
+```
+
+It will ask for your HF username + Access Token (create one at huggingface.co → Settings → Access Tokens).
+
+For future updates to HF:
+```bash
+git push huggingface main
+```
+
+---
+
+## ✅ Requirements
+
+- Python 3.8+
+- Pillow
+- Streamlit
+
+No GPU needed. No API key needed. Runs fully offline.
