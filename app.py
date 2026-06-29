@@ -3,6 +3,10 @@ from PIL import Image
 import io
 import math
 
+# ── Raise Pillow's pixel limit so large upscales don't crash ──────────────────
+# Default limit is ~178M pixels. We raise it to 1 billion (safe for local use).
+Image.MAX_IMAGE_PIXELS = 1_000_000_000
+
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="Image Upscaler & Resizer",
@@ -186,6 +190,13 @@ def fit_to_canvas(img: Image.Image, target_w: int, target_h: int,
     canvas.paste(resized, (x, y))
     return canvas
 
+def preview_thumb(img: Image.Image, max_px: int = 1200) -> Image.Image:
+    """Return a downscaled copy safe for st.image preview (never upscales)."""
+    if img.width <= max_px and img.height <= max_px:
+        return img
+    ratio = min(max_px / img.width, max_px / img.height)
+    return img.resize((int(img.width * ratio), int(img.height * ratio)), Image.LANCZOS)
+
 def to_bytes(img: Image.Image, fmt: str, quality: int) -> bytes:
     buf = io.BytesIO()
     save_img = img
@@ -279,8 +290,8 @@ with tab1:
 
         st.success(f"✅ Done! Output: {result.width} × {result.height} px · {file_size_str(data)}")
         col_orig, col_out = st.columns(2)
-        col_orig.image(img, caption="Original", use_container_width=True)
-        col_out.image(result, caption=f"Upscaled {scale}×", use_container_width=True)
+        col_orig.image(preview_thumb(img), caption="Original", use_container_width=True)
+        col_out.image(preview_thumb(result), caption=f"Upscaled {scale}× (preview — download for full res)", use_container_width=True)
 
         ext = out_fmt_1.lower().replace("jpeg", "jpg")
         st.download_button(
@@ -333,8 +344,8 @@ with tab2:
 
             st.success(f"✅ Done! Output: {result2.width} × {result2.height} px · {file_size_str(data2)}")
             col_o2, col_r2 = st.columns(2)
-            col_o2.image(img,     caption="Original",       use_container_width=True)
-            col_r2.image(result2, caption=preset_name,      use_container_width=True)
+            col_o2.image(preview_thumb(img),     caption="Original",       use_container_width=True)
+            col_r2.image(preview_thumb(result2), caption=preset_name + " (preview)",      use_container_width=True)
 
             ext2 = out_fmt_2.lower().replace("jpeg", "jpg")
             safe_name = preset_name.replace(" ", "_").replace("/", "-").replace("(", "").replace(")", "")
@@ -399,8 +410,8 @@ with tab3:
 
         st.success(f"✅ Done! Output: {result3.width} × {result3.height} px · {file_size_str(data3)}")
         col_o3, col_r3 = st.columns(2)
-        col_o3.image(img,     caption="Original",    use_container_width=True)
-        col_r3.image(result3, caption="Custom size", use_container_width=True)
+        col_o3.image(preview_thumb(img),     caption="Original",    use_container_width=True)
+        col_r3.image(preview_thumb(result3), caption="Custom size (preview)", use_container_width=True)
 
         ext3 = out_fmt_3.lower().replace("jpeg", "jpg")
         st.download_button(
